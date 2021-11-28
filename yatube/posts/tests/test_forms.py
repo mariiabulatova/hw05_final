@@ -1,11 +1,10 @@
 import shutil
 import tempfile
 
-from django.test import Client, TestCase, override_settings
-from django.urls import reverse
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
-
+from django.test import Client, TestCase, override_settings
+from django.urls import reverse
 from posts.models import Group, Post, User
 
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
@@ -18,12 +17,20 @@ SMALL_GIF = (
     b'\x0A\x00\x3B'
 )
 
-SLUG = 'test-slug'
-TITLE = 'test-group'
-DESCRIPTION = 'test-description'
+# SLUG = 'test-slug'
+# TITLE = 'test-group'
+# DESCRIPTION = 'test-description'
+SLUG_1 = 'test-slug-1'
+TITLE_1 = 'test-group-1'
+DESCRIPTION_1 = 'test-description-1'
 AUTHORIZED_USER_NAME = 'user'
 AUTHORIZED_USER_AUTHOR = 'user_author'
+MAIN_PAGE = reverse('posts:index')
 POST_CREATE_PAGE = reverse('post:post_create')
+PROFILE_PAGE = reverse('posts:profile',
+                       kwargs={'username': AUTHORIZED_USER_NAME})
+GROUP_PAGE = reverse('posts:group_list',
+                     kwargs={'slug': SLUG_1})
 COMMENT = "comment"
 
 
@@ -37,9 +44,9 @@ class FormTests(TestCase):
 
         # Создание тестовой группы:
         cls.group_1 = Group.objects.create(
-            title='test-group-1',
-            slug='test-slug-1',
-            description='test-description-1',
+            title=TITLE_1,
+            slug=SLUG_1,
+            description=DESCRIPTION_1,
         )
 
         # Создание тестового поста:
@@ -48,11 +55,12 @@ class FormTests(TestCase):
             author=cls.user,
             group=cls.group_1,
         )
-        cls.COMMENT_URL = reverse("posts:add_comment",
-                                  kwargs={"post_id": cls.post.pk})
+
         cls.post_id = FormTests.post.pk
         cls.POST_EDIT = reverse('posts:post_edit',
                                 kwargs={'post_id': cls.post_id})
+        cls.POST_ID = reverse('posts:post_detail',
+                              kwargs={'post_id': cls.post_id})
 
     @classmethod
     def tearDownClass(cls):
@@ -92,9 +100,8 @@ class FormTests(TestCase):
 
     def test_edit_post_with_valid_form(self):
         """Пост редактируется через валидную форму."""
-
         current_posts_count = Post.objects.count()
-
+        # заполняем данные
         form_data = {
             'text': 'test-text-3',
             'group': FormTests.group_1.id,
@@ -107,8 +114,7 @@ class FormTests(TestCase):
         )
 
         after_editing_post_count = Post.objects.count()
-        self.assertEqual(after_editing_post_count,
-                         current_posts_count)
+        self.assertEqual(after_editing_post_count, current_posts_count)
 
         self.assertTrue(
             Post.objects.filter(
@@ -149,28 +155,60 @@ class FormTests(TestCase):
             ).exists()
         )
 
-    def test_comment_add_authorized_user(self):
-        """Тест авторизированный пользователь может оставить коммент."""
-        current_posts_count = Post.objects.count()
-
-        self.post.comments.all().delete()
+    def test_create_post_with_image_all_pages(self):
+        """Пост с картинкой создается на всех страницах"""
+        posts_count_before = Post.objects.count()
+        uploaded = SimpleUploadedFile(
+            name='small.gif',
+            content=SMALL_GIF,
+            content_type='image/gif'
+        )
         form_data = {
-            'text': COMMENT,
+            'title': 'test-title-4',
+            'text': 'test-text-4',
+            'group': Group.objects.first().id,
+            'image': uploaded,
         }
         # Отправляем POST-запрос
         self.authorized_client.post(
-            self.COMMENT_URL,
+            POST_CREATE_PAGE,
             data=form_data,
             follow=True
         )
+        posts_count_after = Post.objects.count()
+        pages = {
+            MAIN_PAGE: SMALL_GIF,
+            PROFILE_PAGE: SMALL_GIF,
+            GROUP_PAGE: SMALL_GIF
+        }
 
-        after_adding_post_count = Post.objects.count()
+        for url, gif in pages.items():
+            with self.subTest(url=url, gif=gif):
+                response = self.authorized_client.get(url)
+                self.assertNotEqual(posts_count_after, posts_count_before)
+                obj = response.context.get('page_obj')
+                context_image = obj[0].image.read()
+                self.assertEqual(context_image, SMALL_GIF)
 
-        # Проверяем, что число постов не увеличилось
-        self.assertEqual(after_adding_post_count, current_posts_count)
-        # Проверяем, что комментарий соответствует
-        comment = self.post.comments.all()[0]
-        self.assertEqual(comment.text, form_data['text'])
-
+        # posts_count_after = Post.objects.count()
+        # self.assertNotEqual(posts_count_after, posts_count_before)
+        # response = self.authorized_client.get(MAIN_PAGE)
+        # obj = response.context.get('page_obj')
+        # context_image = obj[0].image.read()
+        # self.assertEqual(context_image, SMALL_GIF)
+        #
+        # posts_count_after = Post.objects.count()
+        # self.assertNotEqual(posts_count_after, posts_count_before)
+        # response = self.authorized_client.get(PROFILE_PAGE)
+        # obj = response.context.get('page_obj')
+        # context_image = obj[0].image.read()
+        # self.assertEqual(context_image, SMALL_GIF)
+        #
+        # posts_count_after = Post.objects.count()
+        # self.assertNotEqual(posts_count_after, posts_count_before)
+        # response = self.authorized_client.get(GROUP_PAGE)
+        # obj = response.context.get('page_obj')
+        # context_image = obj[0].image.read()
+        # self.assertEqual(context_image, SMALL_GIF)
 
 # python3 manage.py test posts.tests.test_forms -v2

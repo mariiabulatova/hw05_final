@@ -1,12 +1,11 @@
 from http import HTTPStatus
+
+from django.test import Client, TestCase
 from django.urls import reverse
 
-from django.contrib.auth import get_user_model
-from django.test import Client, TestCase
+from ..models import Comment, Group, Post, User
 
-from ..models import Group, Post, Comment
-
-User = get_user_model()
+COMMENT = "comment"
 
 
 class CommentModelTest(TestCase):
@@ -40,26 +39,26 @@ class CommentModelTest(TestCase):
         self.authorized_client_author = Client()
         self.authorized_client_author.force_login(CommentModelTest.user_author)
 
-    def test_authoriezed_user_can_comment(self):
-        comments_before = Comment.objects.count()
+    def test_test_comment_add_authorized_user(self):
+        """___"""
+        comments_count_before = Comment.objects.count()
         form_data = {
-            'text': 'Текст комментария2'
+            'text': COMMENT
         }
         self.authorized_client.post(
             reverse('posts:add_comment', kwargs={'post_id': self.post.pk}),
             data=form_data,
             follow=True,
         )
-        comments_after = Comment.objects.count()
-
         # Проверяем, что коменнтарий появился
-        self.assertEqual(comments_after, comments_before + 1)
-        # Проверяем, что содержвание коменнтария соответствует
+        comments_count_after = Comment.objects.count()
+        self.assertEqual(comments_count_after, comments_count_before + 1)
+        # Проверяем, что содервание коменнтария соответствует 1 вариант
         self.assertTrue(
-            Comment.objects.filter(
-                text=form_data['text']
-            ).exists()
-        )
+            Comment.objects.filter(text=form_data['text']).exists())
+        # Проверяем, что содержание коменнтария соответствует 2 вариант
+        comment = self.post.comments.all()[0]
+        self.assertEqual(comment.text, form_data['text'])
 
     def test_comment_exist_for_authorized_user(self):
         response = self.authorized_client.get(reverse(
@@ -79,22 +78,18 @@ class CommentModelTest(TestCase):
     def test_guest_user_cannot_comment(self):
         comments_before = Comment.objects.count()
         form_data = {
-            'text': 'Текст комментария2'
+            'text': COMMENT
         }
         self.guest_client.post(
             reverse('posts:add_comment', kwargs={'post_id': self.post.pk}),
             data=form_data,
             follow=True,
         )
-        comments_after = Comment.objects.count()
-
         # Проверяем, что коменнтарий не появился
+        comments_after = Comment.objects.count()
         self.assertEqual(comments_after, comments_before)
         # Проверяем, что содержвание коменнтария соответствует
-        self.assertFalse(
-            Comment.objects.filter(
-                text=form_data['text']
-            ).exists()
-        )
+        self.assertFalse(Comment.objects.filter(
+            text=form_data['text']).exists())
 
-    # python3 manage.py test posts.tests.test_comment -v2
+# python3 manage.py test posts.tests.test_comment -v2

@@ -159,9 +159,9 @@ from django.test import Client, TestCase
 from posts.models import Group, Post, User
 
 POSTS_PER_PAGE_REMAIN = 3
-SLUG = 'test-slug'
 AUTHORIZED_USER_NAME = 'user'
 AUTHORIZED_USER_AUTHOR = 'user_author'
+SLUG = 'test-slug'
 TITLE = 'test-group'
 DESCRIPTION = 'test-description'
 

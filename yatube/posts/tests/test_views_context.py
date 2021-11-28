@@ -2,11 +2,10 @@ import shutil
 import tempfile
 
 from django import forms
+from django.conf import settings
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from posts.models import Group, Post, User
-
-from django.conf import settings
 
 AUTHORIZED_USER_NAME = 'user'
 AUTHORIZED_USER_AUTHOR = 'user_author'
@@ -121,6 +120,7 @@ class ContextViewsTest(TestCase):
         self.assertEqual(second_post_author, ContextViewsTest.post_2.author)
         self.assertEqual(second_post_group, ContextViewsTest.group_2)
 
+
     def test_group_posts_use_correct_context(self):
         """Шаблон group_list сформирован ожидаемым контекстом."""
         # response = self.authorized_client.get(reverse('posts:group_list',
@@ -136,6 +136,10 @@ class ContextViewsTest(TestCase):
         self.assertEqual(first_post_text, ContextViewsTest.post_1.text)
         self.assertEqual(first_post_author, ContextViewsTest.post_1.author)
         self.assertEqual(first_post_group, ContextViewsTest.group_1)
+
+    def test_post_not_in_group(self):
+        response = self.authorized_client.get(GROUP_1_PAGE)
+        self.assertNotIn(self.post_2, response.context['page_obj'])
 
     def test_post_detail_show_correct_context(self):
         """Шаблон post_detail сформирован ожидаемым контекстом."""
@@ -185,4 +189,4 @@ class ContextViewsTest(TestCase):
                 form_field = form.fields.get(value)
                 self.assertIsInstance(form_field, expected)
 
-# # python3 manage.py test posts.tests.test_views_context -v2
+# python3 manage.py test posts.tests.test_views_context -v2

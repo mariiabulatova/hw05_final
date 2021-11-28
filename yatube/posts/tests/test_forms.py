@@ -155,6 +155,7 @@
 #         )
 import shutil
 import tempfile
+from http import HTTPStatus
 
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
@@ -172,7 +173,7 @@ SMALL_GIF = (
     b'\x02\x00\x01\x00\x00\x02\x02\x0C'
     b'\x0A\x00\x3B'
 )
-
+COMMENT = "comment"
 
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class FormTests(TestCase):
@@ -197,6 +198,8 @@ class FormTests(TestCase):
         )
         # # Создаем форму, если нужна проверка атрибутов
         # cls.form = FormTests()
+        cls.COMMENT_URL = reverse("posts:add_comment",
+                                  kwargs={"post_id": cls.post.pk})
 
     @classmethod
     def tearDownClass(cls):
@@ -267,14 +270,6 @@ class FormTests(TestCase):
         """Валидная форма создает запись в index."""
         current_posts_count = Post.objects.count()
 
-        # small_gif = (
-        #      b'\x47\x49\x46\x38\x39\x61\x02\x00'
-        #      b'\x01\x00\x80\x00\x00\x00\x00\x00'
-        #      b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-        #      b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-        #      b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-        #      b'\x0A\x00\x3B'
-        # )
         uploaded = SimpleUploadedFile(
             name='small.gif',
             content=SMALL_GIF,
@@ -301,5 +296,29 @@ class FormTests(TestCase):
                 image='posts/small.gif'
             ).exists()
         )
+
+    def test_comment_add_authorized_user(self):
+        """Тест авторизированный пользователь может оставить коммент."""
+        current_posts_count = Post.objects.count()
+
+        self.post.comments.all().delete()
+        form_data = {
+            'text': COMMENT,
+        }
+        # Отправляем POST-запрос
+        response = self.authorized_client.post(
+            self.COMMENT_URL,
+            data=form_data,
+            follow=True
+        )
+
+        after_adding_post_count = Post.objects.count()
+
+        # Проверяем, что число постов не увеличилось
+        self.assertEqual(after_adding_post_count, current_posts_count)
+        # Проверяем, что комментарий соответствует
+        comment = self.post.comments.all()[0]
+        self.assertEqual(comment.text, form_data['text'])
+
 
 # python3 manage.py test posts.tests.test_forms -v2

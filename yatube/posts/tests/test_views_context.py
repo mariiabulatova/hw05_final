@@ -120,7 +120,6 @@ class ContextViewsTest(TestCase):
         self.assertEqual(second_post_author, ContextViewsTest.post_2.author)
         self.assertEqual(second_post_group, ContextViewsTest.group_2)
 
-
     def test_group_posts_use_correct_context(self):
         """Шаблон group_list сформирован ожидаемым контекстом."""
         # response = self.authorized_client.get(reverse('posts:group_list',

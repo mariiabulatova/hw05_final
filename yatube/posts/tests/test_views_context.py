@@ -6,7 +6,7 @@ from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from posts.models import Group, Post, User
 
-from yatube.yatube import settings
+from django.conf import settings
 
 AUTHORIZED_USER_NAME = 'user'
 AUTHORIZED_USER_AUTHOR = 'user_author'

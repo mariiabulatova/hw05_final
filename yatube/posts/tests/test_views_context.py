@@ -34,6 +34,7 @@ SMALL_GIF = (
     b'\x0A\x00\x3B'
 )
 
+
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class ContextViewsTest(TestCase):
     @classmethod
@@ -91,7 +92,6 @@ class ContextViewsTest(TestCase):
         # Создание экземпляра авторизованного пользователя и автора поста
         self.authorized_client_author = Client()
         self.authorized_client_author.force_login(ContextViewsTest.user_author)
-
 
     def test_index_page_use_correct_context(self):
         """Шаблон index сформирован ожидаемым контекстом."""

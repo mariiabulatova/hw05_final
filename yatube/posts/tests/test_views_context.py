@@ -92,19 +92,19 @@ class ContextViewsTest(TestCase):
         self.authorized_client_author = Client()
         self.authorized_client_author.force_login(ContextViewsTest.user_author)
 
-    def test_index_page_use_correct_context(self):
-        """Шаблон index сформирован ожидаемым контекстом."""
-        response = self.authorized_client.get(MAIN_PAGE)
-
-        second_post_on_index_page = response.context['page_obj'][1]
-
-        second_post_text = second_post_on_index_page.text
-        second_post_author = second_post_on_index_page.author
-        second_post_group = second_post_on_index_page.group
-
-        self.assertEqual(second_post_text, ContextViewsTest.post_2.text)
-        self.assertEqual(second_post_author, ContextViewsTest.post_2.author)
-        self.assertEqual(second_post_group, ContextViewsTest.group_2)
+    # def test_index_page_use_correct_context(self):
+    #     """Шаблон index сформирован ожидаемым контекстом."""
+    #     response = self.authorized_client.get(MAIN_PAGE)
+    #
+    #     second_post_on_index_page = response.context['page_obj'][1]
+    #
+    #     second_post_text = second_post_on_index_page.text
+    #     second_post_author = second_post_on_index_page.author
+    #     second_post_group = second_post_on_index_page.group
+    #
+    #     self.assertEqual(second_post_text, ContextViewsTest.post_2.text)
+    #     self.assertEqual(second_post_author, ContextViewsTest.post_2.author)
+    #     self.assertEqual(second_post_group, ContextViewsTest.group_2)
 
     def test_profile_use_correct_context(self):
         """Шаблон profile сформирован ожидаемым контекстом."""

@@ -155,40 +155,40 @@ class FormTests(TestCase):
             ).exists()
         )
 
-    def test_create_post_with_image_all_pages(self):
-        """Пост с картинкой создается на всех страницах"""
-        posts_count_before = Post.objects.count()
-        uploaded = SimpleUploadedFile(
-            name='small.gif',
-            content=SMALL_GIF,
-            content_type='image/gif'
-        )
-        form_data = {
-            'title': 'test-title-4',
-            'text': 'test-text-4',
-            'group': Group.objects.first().id,
-            'image': uploaded,
-        }
-        # Отправляем POST-запрос
-        self.authorized_client.post(
-            POST_CREATE_PAGE,
-            data=form_data,
-            follow=True
-        )
-        posts_count_after = Post.objects.count()
-        pages = {
-            MAIN_PAGE: SMALL_GIF,
-            PROFILE_PAGE: SMALL_GIF,
-            GROUP_PAGE: SMALL_GIF
-        }
-
-        for url, gif in pages.items():
-            with self.subTest(url=url, gif=gif):
-                response = self.authorized_client.get(url)
-                self.assertNotEqual(posts_count_after, posts_count_before)
-                obj = response.context.get('page_obj')
-                context_image = obj[0].image.read()
-                self.assertEqual(context_image, SMALL_GIF)
+    # def test_create_post_with_image_all_pages(self):
+    #     """Пост с картинкой создается на всех страницах"""
+    #     posts_count_before = Post.objects.count()
+    #     uploaded = SimpleUploadedFile(
+    #         name='small.gif',
+    #         content=SMALL_GIF,
+    #         content_type='image/gif'
+    #     )
+    #     form_data = {
+    #         'title': 'test-title-4',
+    #         'text': 'test-text-4',
+    #         'group': Group.objects.first().id,
+    #         'image': uploaded,
+    #     }
+    #     # Отправляем POST-запрос
+    #     self.authorized_client.post(
+    #         POST_CREATE_PAGE,
+    #         data=form_data,
+    #         follow=True
+    #     )
+    #     posts_count_after = Post.objects.count()
+    #     pages = {
+    #         MAIN_PAGE: SMALL_GIF,
+    #         PROFILE_PAGE: SMALL_GIF,
+    #         GROUP_PAGE: SMALL_GIF
+    #     }
+    #
+    #     for url, gif in pages.items():
+    #         with self.subTest(url=url, gif=gif):
+    #             response = self.authorized_client.get(url)
+    #             self.assertNotEqual(posts_count_after, posts_count_before)
+    #             obj = response.context.get('page_obj')
+    #             context_image = obj[0].image.read()
+    #             self.assertEqual(context_image, SMALL_GIF)
 
         # posts_count_after = Post.objects.count()
         # self.assertNotEqual(posts_count_after, posts_count_before)

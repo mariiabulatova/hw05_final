@@ -1,4 +1,4 @@
-from django.conf import settings
+# from django.conf import settings
 from django.test import Client, TestCase
 from django.urls import reverse
 from posts.models import Group, Post, User
@@ -65,19 +65,19 @@ class PaginatorViewsTest(TestCase):
         self.authorized_client = Client()
         self.authorized_client.force_login(PaginatorViewsTest.user)
 
-    def test_first_posts_page_show_ten_posts(self):
-        """Первые страницы показывают по 10 записей."""
-        pages_addresses = {
-            MAIN_PAGE: settings.POSTS_PER_PAGE,
-            GROUP_PAGE: settings.POSTS_PER_PAGE,
-            PROFILE_PAGE: settings.POSTS_PER_PAGE}
-        for page_address, number in pages_addresses.items():
-            with self.subTest(page_adress=page_address, number=number):
-                response = self.authorized_client.get(page_address)
-                self.assertEqual(
-                    len(response.context['page_obj'].object_list),
-                    number,
-                    f'Количество постов должно быть {settings.POSTS_PER_PAGE}')
+    # def test_first_posts_page_show_ten_posts(self):
+    #     """Первые страницы показывают по 10 записей."""
+    #     pages_addresses = {
+    #         MAIN_PAGE: settings.POSTS_PER_PAGE,
+    #         GROUP_PAGE: settings.POSTS_PER_PAGE,
+    #         PROFILE_PAGE: settings.POSTS_PER_PAGE}
+    #     for page_address, number in pages_addresses.items():
+    #         with self.subTest(page_adress=page_address, number=number):
+    #             response = self.authorized_client.get(page_address)
+    #             self.assertEqual(
+    #                 len(response.context['page_obj'].object_list),
+    #                 number,
+    #                 f'Кол-во постов должно быть {settings.POSTS_PER_PAGE}')
 
     def test_second_posts_page_show_three_posts(self):
         """Вторые страницы показывают по 3 записи."""

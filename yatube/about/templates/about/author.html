@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+{% load static %}
+
+  <div class="row">
+    <div class="col-md-3 mb-3 mt-1">
+      <div class="card">
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="h3">
+                Mariia Bulatova<br>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="h6 text-muted">
+                St.Petersburg
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <div class="card-body">
+        <div class="card-text">
+          <p> <img src="{% static 'img/hi.jpg' %}"
+                   width="575" height="575" alt="Hi!">
+              <br>Follow me on:<br>
+             <a href="https://github.com/mariiabulatova">
+               Git
+             </a><br>
+             <a href="https://www.instagram.com/schamascha/">
+              Instagram
+             </a><br>
+             <a href="https://www.instagram.com/hhdarchitects/">
+               Current work
+             </a><br>
+              <a href="https://hyperskill.org/profile/18073179">
+                Hyperskill
+              </a><br>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

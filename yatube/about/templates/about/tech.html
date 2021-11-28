@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Технологии{% endblock %}
+{% block content %}
+{% load static %}
+  <div class="row">
+
+    <div class="col-md-3 mb-3 mt-1">
+      <div class="card">
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="h3">
+                Технологии
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="h6 text-muted">
+                Хорошее начало
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <div class="card-body">
+        <div class="card-text">
+          <p>
+            <p>Главный роли исполняли в порядке появления:</p><br>
+            <img src="{% static 'img/python.png' %}"
+                 width="75" height="75" alt="python"/> &nbsp;
+            <img src="{% static 'img/bash.png' %}"
+                 width="75" height="75" alt="bash"/> &nbsp;
+            <img src="{% static 'img/git.png' %}"
+                 width="75" height="75" alt="git"/> &nbsp;
+            <img src="{% static 'img/django.png' %}"
+                 width="75" height="75" alt="django"/> &nbsp;
+            <img src="{% static 'img/sqlite.png' %}"
+                 width="75" height="75" alt="sqlite"/> &nbsp;
+            <img src="{% static 'img/html.png' %}"
+                 width="75" height="75" alt="html"/> &nbsp;
+            <img src="{% static 'img/css.png' %}"
+                 width="75" height="75" alt="css"/> &nbsp;
+            <img src="{% static 'img/bootstrap.png' %}"
+                 width="75" height="75" alt="bootstrap"/> &nbsp;
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

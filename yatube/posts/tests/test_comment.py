@@ -39,9 +39,9 @@ class CommentModelTest(TestCase):
         self.authorized_client_author = Client()
         self.authorized_client_author.force_login(CommentModelTest.user_author)
 
-    def test_comment_add_authorized_user(self):
-        """Проверка доступа авторизованного юзера к комментированию поста"""
-        response = self.authorized_client.get('posts/1/comment')
-        self.assertEqual(response.status_code, HTTPStatus.OK)
+    # def test_comment_add_authorized_user(self):
+    #     """Проверка доступа авторизованного юзера к комментированию поста"""
+    #     response = self.authorized_client.get(f'{self.post.pk}/comment')
+    #     self.assertEqual(response.status_code, HTTPStatus.OK)
 
     # python3 manage.py test posts.tests.test_comment -v2

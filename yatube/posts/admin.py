@@ -32,7 +32,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Follow)
 class FollowAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'user','author',)
+    list_display = ('pk', 'user', 'author',)
     search_fields = ('user', 'author')
     list_filter = ('user',)
     empty_value_display = '-пусто-'

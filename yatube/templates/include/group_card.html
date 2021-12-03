@@ -1,0 +1,29 @@
+{#добавила для идентичности решения страниц с постами#}
+<div class="col-md-3 mb-3 mt-1">
+  <div class="card">
+    <div class="card-body">
+      <div class="h2">
+        {{ group.title }}
+      </div>
+      <div class="h3 text-muted">
+        @{{ group.title }}
+      </div>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <div class="h6 text-muted">
+{#            следующая строчка для теста#}
+          <p>{{ group.description }}</p>
+{#            а так мне больше нравится:#}
+{#            одинаковый отступ снизу с group.post.count и author.posts.count #}
+          Описание группы: {{ group.description }}
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="h6 text-muted">
+          Записей: {{ group.posts.count }}
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

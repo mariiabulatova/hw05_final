@@ -14,9 +14,34 @@
            class="nav-link {% if follow %}active{% endif %}"
            href="{% url 'posts:follow_index' %}"
         >
-          Избранные авторы
+          Мои подписки
         </a>
       </li>
     </ul>
   </div>
 {% endif %}
+
+{#думала switcher засунуть в аналогичную конструкцию как author_card и group_card#}
+{#но не понравилось пока#}
+{#{% if user.is_authenticated %}#}
+{#    <div class="col-md-3 mb-3 mt-1">#}
+{#        <div class="card">#}
+{#            <ul class="list-group list-group-flush">#}
+{#                <li class="list-group-item">#}
+{#                    <div class="h5">#}
+{#                        <a class="nav-link {% if index %}active{% endif %}"#}
+{#                           href="{% url 'posts:index' %}">Все авторы#}
+{#                        </a>#}
+{#                    </div>#}
+{#                </li>#}
+{#                <li class="list-group-item">#}
+{#                    <div class="h5 text-muted">#}
+{#                        <a class="nav-link {% if follow %}active{% endif %}"#}
+{#                           href="{% url 'posts:follow_index' %}">Мои подписки#}
+{#                        </a>#}
+{#                    </div>#}
+{#                </li>#}
+{#            </ul>#}
+{#        </div>#}
+{#    </div>#}
+{#{% endif %}#}

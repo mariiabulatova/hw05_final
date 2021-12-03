@@ -19,15 +19,18 @@ urlpatterns = [
     path('create/', views.post_create, name='post_create'),
     # 7 Комментирование поста
     path('posts/<int:post_id>/comment', views.add_comment, name='add_comment'),
+    # 8
     path(
         'follow/',
         views.follow_index,
         name='follow_index'),
+    # 9
     path(
         'profile/<str:username>/follow/',
         views.profile_follow,
         name='profile_follow'
     ),
+    # 10
     path(
         'profile/<str:username>/unfollow/',
         views.profile_unfollow,

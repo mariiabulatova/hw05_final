@@ -109,7 +109,7 @@ def post_edit(request, post_id: int):
         'is_edit': True,
         'form': form,
         'post_id': post_id,
-        'post': post,  # было в примере из теории
+        'post': post,
     }
     return render(request, 'posts/new_post.html', context)
 

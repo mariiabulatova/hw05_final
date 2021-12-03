@@ -10,8 +10,8 @@ class Group(models.Model):
                              help_text='Дайте название сообществу'
                              )
     slug = models.SlugField(unique=True)
-    description = models.TextField('Описание сообщества',
-                                   max_length=2000)
+    # AE: Свойство `description` модели `Group` должно быть `TextField` ))
+    description = models.TextField('Описание сообщества')
 
     class Meta:
         pass
@@ -32,8 +32,8 @@ class Post(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='posts',  # нет в теории, почему?
-        # verbose_name='Автор' # добавилось из теории
+        related_name='posts',
+        verbose_name='author'
     )
     group = models.ForeignKey(
         Group,
@@ -44,20 +44,19 @@ class Post(models.Model):
         verbose_name='group',
         help_text='Выберите группу'
     )
-    # Поле для картинки (необязательное)
     image = models.ImageField(
         'Картинка',
-        upload_to='posts/',  # директорию,для загрузки пользовательских файлов
+        upload_to='posts/',
         blank=True,
         null=True
     )
 
     class Meta:
         ordering = ('-pub_date',)
-        verbose_name = 'Пост'  # добавилось из теории
-        verbose_name_plural = 'Посты'  # добавилось из теории
+        verbose_name = 'Пост'
+        verbose_name_plural = 'Посты'
 
-    def __str__(self):  # для отображения объектов в интерфейсе администратора
+    def __str__(self):
         return self.text[:15]
 
 
@@ -83,12 +82,10 @@ class Follow(models.Model):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE,
                              related_name='follower'
-                             # verbose_name='подписчик'
                              )
     author = models.ForeignKey(User,
                                on_delete=models.CASCADE,
                                related_name='following'
-                               # verbose_name='автор'
                                )
 
     class Meta:

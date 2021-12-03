@@ -136,9 +136,16 @@ class ContextViewsTest(TestCase):
         self.assertEqual(first_post_author, ContextViewsTest.post_1.author)
         self.assertEqual(first_post_group, ContextViewsTest.group_1)
 
-    def test_post_not_in_group(self):
-        response = self.authorized_client.get(GROUP_1_PAGE)
-        self.assertNotIn(self.post_2, response.context['page_obj'])
+    # def test_group(self):
+    #     response = self.authorized_client.get(GROUP_1_PAGE)
+    #     group = response.context['group']
+    #     self.assertEqual(group.slug, self.group_1.slug)
+    #     self.assertEqual(group.title, self.group_1.title)
+    #     self.assertEqual(group.description, self.group_1.description)
+
+    # def test_post_not_in_group(self):
+    #     response = self.authorized_client.get(GROUP_1_PAGE)
+    #     self.assertNotIn(self.post_2, response.context['page_obj'])
 
     def test_post_detail_show_correct_context(self):
         """Шаблон post_detail сформирован ожидаемым контекстом."""
@@ -188,4 +195,4 @@ class ContextViewsTest(TestCase):
                 form_field = form.fields.get(value)
                 self.assertIsInstance(form_field, expected)
 
-# python3 manage.py test posts.tests.test_views_context -v2
+# # python3 manage.py test posts.tests.test_views_context -v2

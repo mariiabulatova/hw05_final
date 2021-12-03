@@ -7,7 +7,6 @@ from .models import Comment, Post
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        # Добавили поле image в форму
         fields = ['group', 'text', 'image']
         help_texts = {
             'text': 'Введите текст',

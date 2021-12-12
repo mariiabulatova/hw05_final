@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load thumbnail %}
 
-{% block title %}{{ title}}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 {#{% block header %}Последние обновления на сайте{% endblock %}#}
 
 {% block content %}
@@ -14,7 +14,6 @@
         </div>
 
         <div class="row">
-{#            <div class="col-md-12">#}
             {% include 'include/switcher.html' %}
             <div class="col-md-12">
                 {% for post in page_obj %}
@@ -34,9 +33,6 @@
                                         Все посты пользователя</a>
                                 </li>
                                 <li>
-                                    Дата публикации: {{ post.pub_date|date:"d E Y" }}
-                                </li>
-                                <li>
                                     Группа: <!--{{ post.group.title }}-->
                                     {% if post.group %}
                                         <a href="{% url 'posts:group_list' post.group.slug %}">
@@ -45,7 +41,24 @@
                                     {% endif %}
                                 </li>
                                 <p>{{ post.text }}</p>
+                                <a class="btn btn-lg btn-primary"
+                                   href="{% url 'posts:post_detail' post.pk %}" role="button">
+                                    Подробнее
+                                </a>
                             </ul>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">{{ post.pub_date }}</small>
+                                {% if request.user == post.author %}
+                                  <div class="btn-group ">
+                                    <a class="btn btn-sm text-muted"
+{#                                       href="/{{ post.author.username }}/{{ post.id }}/edit"#}
+                                       href="/posts/{{ post.id }}/edit"
+                                       role="button">
+                                        Редактировать
+                                    </a>
+                                  </div>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

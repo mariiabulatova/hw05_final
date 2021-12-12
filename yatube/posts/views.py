@@ -114,6 +114,8 @@ def post_edit(request, post_id: int):
     return render(request, 'posts/new_post.html', context)
 
 
+
+
 @login_required
 def add_comment(request, post_id):
     post = get_object_or_404(Post, id=post_id)

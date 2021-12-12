@@ -23,30 +23,28 @@
                                         @{{ post.author.username }}</a>
                                 </li>
                                 <li>
-                                    Дата публикации: {{ post.pub_date|date:"d E Y" }}
-                                </li>
-                                <li>
                                     Группа: <!--{{ post.group.title }}-->
                                     {% if post.group %}
                                         <a href="{% url 'posts:group_list' post.group.slug %}">{{ post.group.title }}</a>
                                     {% endif %}
                                 </li>
                                 <p>{{ post.text }}</p>
+                                <a class="btn btn-lg btn-primary"
+                                   href="{% url 'posts:post_detail' post.pk %}" role="button">
+                                    Подробнее
+                                </a>
                             </ul>
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group ">
+                                <small class="text-muted">{{ post.pub_date }}</small>
+                                {% if request.user == author %}
+                                  <div class="btn-group ">
                                     <a class="btn btn-sm text-muted"
-                                       href="/{{ author.name }}/{{ author.posts.count }}/"
-                                       role="button">
-                                        Добавить комментарий
-                                    </a>
-                                    <a class="btn btn-sm text-muted"
-                                       href="/{{ author.username }}/{{ post.id }}/edit"
+                                       href="/posts/{{ post.id }}/edit"
                                        role="button">
                                         Редактировать
                                     </a>
-                                </div>
-                                <small class="text-muted">{{ post.pub_date }}</small>
+                                  </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

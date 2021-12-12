@@ -15,10 +15,10 @@
 
         <div class="row">
             {% include 'include/switcher.html' %}
-            {% if author.following.count == 0 %}
-                Вы ещё ни на кого не подписаны...
-            {% else %}
-                <div class="col-md-12">
+            <div class="col-md-12">
+                {% if request.user.follower.count == 0 %}
+                    <h4>Вы ещё ни на кого не подписаны...</h4>
+                {% else %}
                     {% for post in page_obj %}
                         <div class="card mb-3 mt-1 shadow-sm">
                             <div class="card-body">
@@ -35,60 +35,37 @@
                                         <a href="{% url 'posts:profile' post.author.username %}">
                                              Все посты пользователя</a>
                                     </li>
-                                    <li>
-                                        Дата публикации: {{ post.pub_date|date:"d E Y" }}
-                                    </li>
-                                    <li>
-                                        Группа: <!--{{ post.group.title }}-->
-                                        {% if post.group %}
+                                    {% if post.group %}
+                                        <li>Группа:
                                             <a href="{% url 'posts:group_list' post.group.slug %}">
-                                                {{ post.group.title }}</a>
-                                        {% endif %}
-                                    </li>
-                                    <p>{{ post.text }}</p>
+                                                {{ post.group.title }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                    <p>{{ post.text| truncatewords:35 }}</p>
+                                    <a class="btn btn-lg btn-primary"
+                                       href="{% url 'posts:post_detail' post.pk %}" role="button">
+                                        Подробнее
+                                    </a>
                                 </ul>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">{{ post.pub_date }}</small>
+                                    {% if request.user == post.author %}
+                                        <div class="btn-group ">
+                                            <a class="btn btn-sm text-muted"
+                                               href="/{{ post.author.username }}/{{ post.id }}/edit"
+                                               role="button">
+                                                Редактировать
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-{#                        {% if not forloop.last %}<hr>{% endif %}#}
                     {% endfor %}
                     {% include "include/paginator.html" %}
-                </div>
-            {% endif %}
+                {% endif %}
+            </div>
         </div>
     </main>
 {% endblock %}
-
-
-
-
-
-
-
-
-{#        Неупорядоченная версия#}
-{#        {% for post in page_obj %}#}
-{#            <ul>#}
-{#                <li>#}
-{#                    Автор: {{ post.author.get_full_name }}#}
-{#                    <a href="{% url 'post:profile' post.author.username %}">#}
-{#                        Все посты пользователя#}
-{#                    </a>#}
-{#                </li>#}
-{#                <li>#}
-{#                    Дата публикации: {{ post.pub_date|date:"d E Y" }}#}
-{#                </li>#}
-{#            </ul>#}
-{#          <p>{{ post.text }}</p>#}
-{#          {% thumbnail post.image "960x339" crop="center" upscale=True as im %}#}
-{#              <img class="card-img my-2" src="{{ im.url }}">#}
-{#          {% endthumbnail %}#}
-{#          <p><a href="{% url 'post:post_detail' post.pk %}">подробная информация </a></p>#}
-{#          {% if post.group.slug is not None %}#}
-{#              <a href="{% url 'post:group_list' post.group.slug %}">все записи группы</a>#}
-{#          {% else %}#}
-{#          {% endif %}#}
-{#          {% if not forloop.last %}<hr>{% endif %}#}
-{#      {% endfor %}#}
-{#      {% include 'include/paginator.html' %}#}
-{#  </div>#}
-{#{% endblock %}#}

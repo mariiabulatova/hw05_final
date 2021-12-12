@@ -23,10 +23,16 @@
                                         @{{ post.author.username }}</a>
                                 </li>
                                 <li>
-                                    Дата публикации: {{ post.pub_date|date:"d M Y" }}
+                                    <a href="{% url 'posts:profile' post.author.username %}">
+                                        Все посты пользователя</a>
                                 </li>
-                                <li><p>{{ post.text|linebreaksbr }}</p></li>
+                                <p>{{ post.text|linebreaksbr }}</p>
+                                <a class="btn btn-lg btn-primary"
+                                   href="{% url 'posts:post_detail' post.pk %}" role="button">
+                                    Подробнее
+                                </a>
                             </ul>
+                            <small class="text-muted">{{ post.pub_date }} </small>
                         </div>
                     </div>
                 {% endfor %}

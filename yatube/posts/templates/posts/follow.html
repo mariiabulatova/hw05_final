@@ -42,7 +42,7 @@
                                             </a>
                                         </li>
                                     {% endif %}
-                                    <p>{{ post.text| truncatewords:35 }}</p>
+                                    <p>{{ post.text|truncatewords:62 }}</p>
                                     <a class="btn btn-lg btn-primary"
                                        href="{% url 'posts:post_detail' post.pk %}" role="button">
                                         Подробнее

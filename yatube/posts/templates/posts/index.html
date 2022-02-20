@@ -19,7 +19,7 @@
                 {% for post in page_obj %}
                     <div class="card mb-3 mt-1 shadow-sm">
                         <div class="card-body">
-                            {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+                            {% thumbnail post.image "960x320" crop="center" upscale=True as im %}
                                 <img class="card-img my-2" src="{{ im.url }}">
                             {% endthumbnail %}
                             <ul>
@@ -40,7 +40,7 @@
                                         </a>
                                     {% endif %}
                                 </li>
-                                <p>{{ post.text }}</p>
+                                <p>{{ post.text|truncatechars:62 }}</p>
                                 <a class="btn btn-lg btn-primary"
                                    href="{% url 'posts:post_detail' post.pk %}" role="button">
                                     Подробнее

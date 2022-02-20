@@ -26,7 +26,7 @@
                                     <a href="{% url 'posts:profile' post.author.username %}">
                                         Все посты пользователя</a>
                                 </li>
-                                <p>{{ post.text|linebreaksbr }}</p>
+                                <p>{{ post.text|truncatechars:63 }}</p>
                                 <a class="btn btn-lg btn-primary"
                                    href="{% url 'posts:post_detail' post.pk %}" role="button">
                                     Подробнее

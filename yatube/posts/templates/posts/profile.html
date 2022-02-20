@@ -28,7 +28,7 @@
                                         <a href="{% url 'posts:group_list' post.group.slug %}">{{ post.group.title }}</a>
                                     {% endif %}
                                 </li>
-                                <p>{{ post.text }}</p>
+                                <p>{{ post.text|truncatechars:63 }}</p>
                                 <a class="btn btn-lg btn-primary"
                                    href="{% url 'posts:post_detail' post.pk %}" role="button">
                                     Подробнее
